@@ -85,7 +85,7 @@ Conheça os princípios pouco divulgados da Maçonaria
 </h1>
 
 <p class="hero text-gray-300 max-w-xl mb-8 opacity-0">
-Um resumo direto baseado em conteúdos reais — sem enrolação.
+Um resumo direto baseado em conteúdos reais ( sem enrolação. )
 </p>
 
 <a id="cta1"
@@ -175,9 +175,8 @@ Falar agora
 
 <!-- POPUP -->
 <div id="popup" class="hidden fixed bottom-5 right-5 bg-black border border-yellow-500 p-4 rounded-xl">
-+37 pessoas acessando agora
+<span id="counter">+100</span> pessoas acessando agora
 </div>
-
 <script>
 
 /* LOADER */
@@ -301,6 +300,27 @@ function update(){
 }
 
 setInterval(draw,30);
+    <script>
+
+let count = 100;
+
+function updateCounter(){
+    // variação aleatória (-3 a +5)
+    let variation = Math.floor(Math.random() * 9) - 3;
+
+    count += variation;
+
+    // limite mínimo e máximo
+    if(count < 87) count = 87;
+    if(count > 143) count = 143;
+
+    document.getElementById("counter").innerText = "+" + count;
+}
+
+// atualiza a cada 3 segundos
+setInterval(updateCounter, 3000);
+
+</script>
 
 </script>
 
