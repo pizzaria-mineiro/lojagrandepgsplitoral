@@ -51,6 +51,20 @@ canvas {
     inset: 0;
     z-index: -1;
 }
+
+/* Modal premium */
+.modal-box {
+    backdrop-filter: blur(20px);
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(201,168,93,0.3);
+}
+
+/* efeito desbloqueio */
+.blur-content {
+    filter: blur(6px);
+    opacity: 0.6;
+    transition: 0.5s;
+}
 </style>
 </head>
 
@@ -93,7 +107,7 @@ Quero acessar no WhatsApp
 
 </section>
 
-<!-- MODAL -->
+<!-- MODAL VIDEO -->
 <div id="modal" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-50">
 <div class="relative w-full max-w-4xl">
 <button onclick="closeVideo()" class="absolute -top-10 right-0 text-white text-2xl">✕</button>
@@ -106,11 +120,43 @@ frameborder="0" allowfullscreen></iframe>
 <!-- CARDS -->
 <section class="py-20 max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-8">
 
-<div class="card p-6 fade opacity-0">Origem explicada de forma simples</div>
-<div class="card p-6 fade opacity-0">O que acontece nas lojas</div>
-<div class="card p-6 fade opacity-0">Verdades pouco faladas</div>
+<div class="card p-6 fade opacity-0 cursor-pointer" onclick="openCard(1)">
+Origem explicada de forma simples
+</div>
+
+<div class="card p-6 fade opacity-0 cursor-pointer" onclick="openCard(2)">
+O que acontece nas lojas
+</div>
+
+<div class="card p-6 fade opacity-0 cursor-pointer" onclick="openCard(3)">
+Verdades pouco faladas
+</div>
 
 </section>
+
+<!-- MODAL CARD -->
+<div id="cardModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+
+<div id="cardBox" class="modal-box p-8 rounded-2xl max-w-lg w-full relative scale-90 opacity-0">
+
+<button onclick="closeCard()" class="absolute top-3 right-4 text-white text-xl">✕</button>
+
+<h3 id="cardTitle" class="text-2xl font-bold mb-4 text-yellow-400"></h3>
+
+<p id="cardText" class="text-gray-300 mb-6 blur-content"></p>
+
+<button onclick="unlockContent()" class="mb-4 text-yellow-400 underline">
+Desbloquear conteúdo
+</button>
+
+<a href="https://wa.me/5599999999999?text=Quero entender melhor sobre maçonaria"
+class="glow px-6 py-3 rounded-lg text-black font-bold block text-center">
+Ver conteúdo completo no WhatsApp
+</a>
+
+</div>
+
+</div>
 
 <!-- CTA FINAL -->
 <section class="py-20 text-center">
@@ -142,18 +188,10 @@ window.onload = () => {
     }, 1200);
 };
 
-/* ANIMAÇÕES GSAP */
+/* ANIMAÇÕES */
 function startAnimations(){
     gsap.to(".hero", {opacity:1, y:-20, stagger:0.3, duration:1});
-    gsap.to(".fade", {
-        scrollTrigger: {
-            trigger: ".fade",
-            start: "top 80%"
-        },
-        opacity:1,
-        y:-20,
-        stagger:0.2
-    });
+    gsap.to(".fade", {opacity:1, y:-20, stagger:0.2, delay:0.3});
 }
 
 /* VIDEO */
@@ -164,13 +202,60 @@ function closeVideo(){
     document.getElementById('modal').classList.add('hidden');
 }
 
-/* TRACK CLIQUE */
-document.getElementById("cta1").onclick = () => {
-    console.log("Clique CTA topo");
+/* SOM */
+const clickSound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-click-1245.mp3");
+
+/* CARDS */
+function openCard(id){
+
+    clickSound.play();
+
+    const title = document.getElementById("cardTitle");
+    const text = document.getElementById("cardText");
+
+    if(id === 1){
+        title.innerText = "Origem da Maçonaria";
+        text.innerText = "A maçonaria surgiu a partir de antigas guildas de construtores e evoluiu para uma organização focada em princípios filosóficos e desenvolvimento pessoal.";
+    }
+
+    if(id === 2){
+        title.innerText = "O que acontece nas lojas";
+        text.innerText = "As reuniões envolvem estudos, rituais simbólicos e discussões que visam evolução intelectual e disciplina.";
+    }
+
+    if(id === 3){
+        title.innerText = "Verdades pouco faladas";
+        text.innerText = "Grande parte do que circula na internet é mito. A base real está ligada à ética, filosofia e crescimento pessoal.";
+    }
+
+    const modal = document.getElementById("cardModal");
+    const box = document.getElementById("cardBox");
+
+    modal.classList.remove("hidden");
+
+    gsap.to(box, {scale:1, opacity:1, duration:0.4});
 }
-document.getElementById("cta2").onclick = () => {
-    console.log("Clique CTA final");
+
+/* desbloqueio */
+function unlockContent(){
+    clickSound.play();
+    const text = document.getElementById("cardText");
+
+    gsap.to(text, {
+        filter: "blur(0px)",
+        opacity: 1,
+        duration: 0.5
+    });
 }
+
+/* fechar */
+function closeCard(){
+    document.getElementById('cardModal').classList.add('hidden');
+}
+
+/* TRACK */
+document.getElementById("cta1").onclick = () => console.log("CTA topo");
+document.getElementById("cta2").onclick = () => console.log("CTA final");
 
 /* POPUP */
 setTimeout(() => {
@@ -221,4 +306,3 @@ setInterval(draw,30);
 
 </body>
 </html>
-
